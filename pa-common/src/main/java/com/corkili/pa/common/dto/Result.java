@@ -2,7 +2,7 @@ package com.corkili.pa.common.dto;
 
 import java.util.Objects;
 
-public final class Result<Extra> implements Cloneable {
+public final class Result<Extra> {
 
     private final boolean success;
     private final String message;
@@ -14,6 +14,13 @@ public final class Result<Extra> implements Cloneable {
         this.success = success;
         this.message = message;
         this.extra = extra;
+    }
+
+    public Result(Result<Extra> result) {
+        this.createTimestamp = System.currentTimeMillis();
+        this.success = result.success;
+        this.message = result.message;
+        this.extra = result.extra;
     }
 
     public boolean isSuccess() {
@@ -30,11 +37,6 @@ public final class Result<Extra> implements Cloneable {
 
     public long getCreateTimestamp() {
         return createTimestamp;
-    }
-
-    @Override
-    protected Result clone() {
-        return new Result<>(success, message, extra);
     }
 
     @Override

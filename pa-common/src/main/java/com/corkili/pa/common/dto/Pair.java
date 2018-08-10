@@ -2,7 +2,7 @@ package com.corkili.pa.common.dto;
 
 import java.util.Objects;
 
-public final class Pair<Key, Value> implements Cloneable {
+public final class Pair<Key, Value> {
 
     private Key key;
     private Value value;
@@ -30,11 +30,6 @@ public final class Pair<Key, Value> implements Cloneable {
     public void set(Key key, Value value) {
         this.key = key;
         this.value = value;
-    }
-
-    @Override
-    protected Object clone() {
-        return new Pair<>(key, value);
     }
 
     @Override

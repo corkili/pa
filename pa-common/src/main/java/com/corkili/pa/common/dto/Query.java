@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import com.corkili.pa.common.util.CheckUtils;
 
-public final class Query implements Cloneable {
+public final class Query {
 
     private final Map<Object, Object> params;
 
@@ -62,11 +62,6 @@ public final class Query implements Cloneable {
         } else {
             return null;
         }
-    }
-
-    @Override
-    protected Object clone()  {
-        return new Query(this);
     }
 
     @Override
