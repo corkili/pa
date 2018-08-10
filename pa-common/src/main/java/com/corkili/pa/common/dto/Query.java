@@ -8,7 +8,7 @@ import com.corkili.pa.common.util.CheckUtils;
 
 public final class Query {
 
-    private final Map<Object, Object> params;
+    private final Map<String, Object> params;
 
     public Query() {
         params = new HashMap<>();
@@ -21,7 +21,7 @@ public final class Query {
         }
     }
 
-    public boolean add(Object name, Object param) {
+    public boolean add(String name, Object param) {
         if (CheckUtils.hasNull(name, param)) {
             return false;
         }
@@ -35,7 +35,7 @@ public final class Query {
                 CheckUtils.isNull(nameAndParam.getValue())) {
             return false;
         }
-        params.put(nameAndParam.getKey(), nameAndParam.getValue());
+        params.put(nameAndParam.getKey().toString(), nameAndParam.getValue());
         return true;
     }
 
@@ -52,7 +52,7 @@ public final class Query {
         return count;
     }
 
-    public <T> T get(Object name, Class<T> clazz) {
+    public <T> T get(String name, Class<T> clazz) {
         if (CheckUtils.hasNull(name, clazz)) {
             return null;
         }
