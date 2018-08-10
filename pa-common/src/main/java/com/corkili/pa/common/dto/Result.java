@@ -12,14 +12,14 @@ public final class Result<Extra> {
     public Result(boolean success, String message, Extra extra) {
         this.createTimestamp = System.currentTimeMillis();
         this.success = success;
-        this.message = message;
+        this.message = message == null ? "" : message;
         this.extra = extra;
     }
 
     public Result(Result<Extra> result) {
         this.createTimestamp = System.currentTimeMillis();
         this.success = result.success;
-        this.message = result.message;
+        this.message = result.message == null ? "" : result.message;
         this.extra = result.extra;
     }
 

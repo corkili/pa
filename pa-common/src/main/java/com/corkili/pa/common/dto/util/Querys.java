@@ -20,14 +20,13 @@ public final class Querys {
             if (CheckUtils.isNull(method) || !method.isAnnotationPresent(Params.class)) {
                 return false;
             }
-            Param[] params = method.getDeclaredAnnotation(Params.class).params();
+            Param[] params = method.getAnnotation(Params.class).params();
             if (CheckUtils.isEmpty(params)) {
                 return true;
             }
             for (Param param : params) {
-                String name = param.name();
-                Class<?> type = param.type();
-                if (CheckUtils.isNull(query.get(name, type))) {
+                if (param.required() &&
+                        CheckUtils.isNull(query.get(param.name(), param.type()))) {
                     return false;
                 }
             }
