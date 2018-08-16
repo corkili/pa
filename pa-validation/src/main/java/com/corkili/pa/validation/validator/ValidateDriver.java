@@ -6,6 +6,6 @@ import com.corkili.pa.common.dto.Result;
 
 public interface ValidateDriver {
 
-    <T> Result<List<ValidatorResult>> validate(T obj, Class<T> clazz);
+    <T> Result<List<ValidateResult>> validate(T obj, Class<T> clazz);
 
 }

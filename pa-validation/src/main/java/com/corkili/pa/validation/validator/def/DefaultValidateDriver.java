@@ -9,7 +9,7 @@ import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.Validated;
 import com.corkili.pa.validation.validator.ValidateDriver;
 import com.corkili.pa.validation.validator.ValidateDriverManager;
-import com.corkili.pa.validation.validator.ValidatorResult;
+import com.corkili.pa.validation.validator.ValidateResult;
 
 public class DefaultValidateDriver implements ValidateDriver {
 
@@ -26,7 +26,7 @@ public class DefaultValidateDriver implements ValidateDriver {
     }
 
     @Override
-    public <T> Result<List<ValidatorResult>> validate(T obj, Class<T> clazz) {
+    public <T> Result<List<ValidateResult>> validate(T obj, Class<T> clazz) {
         if (isValidated(clazz)) {
             return new Result<>(false,
                     IUtils.format("class {} can't be validated without annotation {}",

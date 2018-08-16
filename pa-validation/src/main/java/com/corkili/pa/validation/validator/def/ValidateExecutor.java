@@ -11,7 +11,7 @@ import com.corkili.pa.common.dto.Result;
 import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.validator.Validator;
-import com.corkili.pa.validation.validator.ValidatorResult;
+import com.corkili.pa.validation.validator.ValidateResult;
 
 public class ValidateExecutor<E> {
 
@@ -24,17 +24,17 @@ public class ValidateExecutor<E> {
         validatorMap = new HashMap<>();
     }
 
-    public Result<List<ValidatorResult>> validate(Object object) {
-        List<ValidatorResult> validatorResults = new ArrayList<>(validatorMap.size());
+    public Result<List<ValidateResult>> validate(Object object) {
+        List<ValidateResult> validateResults = new ArrayList<>(validatorMap.size());
         boolean success = true;
         StringBuilder msgBuilder = new StringBuilder("[");
         for (Entry<Field, Validator<?>> entry : validatorMap.entrySet()) {
-            Result<ValidatorResult> result = validate(object, entry.getKey(), entry.getValue());
+            Result<ValidateResult> result = validate(object, entry.getKey(), entry.getValue());
             success = success && result.isSuccess();
             if (!result.isSuccess()) {
                 msgBuilder.append(result.getMessage());
             }
-            validatorResults.add(result.getExtra());
+            validateResults.add(result.getExtra());
         }
         if (success) {
             msgBuilder.delete(0, msgBuilder.length());
@@ -42,7 +42,7 @@ public class ValidateExecutor<E> {
         } else {
             msgBuilder.append("]");
         }
-        return new Result<>(success, msgBuilder.toString(), validatorResults);
+        return new Result<>(success, msgBuilder.toString(), validateResults);
     }
 
     public <T> boolean add(Field field, Validator<T> validator) {
@@ -61,7 +61,7 @@ public class ValidateExecutor<E> {
         }
     }
 
-    private  <T> Result<ValidatorResult> validate(Object object, Field field, Validator<T> validator) {
+    private  <T> Result<ValidateResult> validate(Object object, Field field, Validator<T> validator) {
         try {
             Object element = field.get(object);
             if (validator.getValidateElementType().isInstance(field.get(object))) {
@@ -69,12 +69,12 @@ public class ValidateExecutor<E> {
             } else {
                 return new Result<>(false,
                         IUtils.format("validate failed: field's type is invalid"),
-                        new ValidatorResult());
+                        new ValidateResult());
             }
         } catch (Exception e) {
             return new Result<>(false,
                     IUtils.format("validate exception occur: {}", IUtils.stringifyError(e)),
-                    new ValidatorResult());
+                    new ValidateResult());
         }
     }
 

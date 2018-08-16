@@ -4,7 +4,7 @@ import com.corkili.pa.common.dto.Result;
 
 public interface Validator<E> {
 
-    Result<ValidatorResult> validate(E element);
+    Result<ValidateResult> validate(E element);
 
     Class<E> getValidateElementType();
 
