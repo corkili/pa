@@ -1,5 +1,6 @@
 package com.corkili.pa.validation.validator.def;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ public class ValidateExecutor<E> {
 
     private Class<E> objectType;
 
-    private Map<Field, Validator<?>> validatorMap;
+    private Map<Field, Validator<?, ?>> validatorMap;
 
     public ValidateExecutor(Class<E> objectType) {
         this.objectType = objectType;
@@ -28,7 +29,7 @@ public class ValidateExecutor<E> {
         List<ValidateResult> validateResults = new ArrayList<>(validatorMap.size());
         boolean success = true;
         StringBuilder msgBuilder = new StringBuilder("[");
-        for (Entry<Field, Validator<?>> entry : validatorMap.entrySet()) {
+        for (Entry<Field, Validator<?, ?>> entry : validatorMap.entrySet()) {
             Result<ValidateResult> result = validate(object, entry.getKey(), entry.getValue());
             success = success && result.isSuccess();
             if (!result.isSuccess()) {
@@ -45,7 +46,7 @@ public class ValidateExecutor<E> {
         return new Result<>(success, msgBuilder.toString(), validateResults);
     }
 
-    public <T> boolean add(Field field, Validator<T> validator) {
+    public <T, A extends Annotation> boolean add(Field field, Validator<T, A> validator) {
         if (CheckUtils.hasNull(field, validator)) {
             return false;
         } else {
@@ -61,11 +62,13 @@ public class ValidateExecutor<E> {
         }
     }
 
-    private  <T> Result<ValidateResult> validate(Object object, Field field, Validator<T> validator) {
+    private  <T, A extends Annotation> Result<ValidateResult> validate(Object object, Field field, Validator<T, A> validator) {
         try {
             Object element = field.get(object);
-            if (validator.getValidateElementType().isInstance(field.get(object))) {
-                return validator.validate(validator.getValidateElementType().cast(element));
+            if (validator.getValidateElementType().isInstance(field.get(object)) &&
+                    CheckUtils.isNotNull(field.getAnnotation(validator.getAnnotationType()))) {
+                return validator.validate(validator.getValidateElementType().cast(element),
+                        field.getAnnotation(validator.getAnnotationType()));
             } else {
                 return new Result<>(false,
                         IUtils.format("validate failed: field's type is invalid"),
