@@ -28,12 +28,12 @@ public class ValidateExecutor<E> {
     public Result<List<ValidateResult>> validate(Object object) {
         List<ValidateResult> validateResults = new ArrayList<>(validatorMap.size());
         boolean success = true;
-        StringBuilder msgBuilder = new StringBuilder("[");
+        StringBuilder msgBuilder = new StringBuilder("{ ");
         for (Entry<Field, Validator<?, ?>> entry : validatorMap.entrySet()) {
             Result<ValidateResult> result = validate(object, entry.getKey(), entry.getValue());
             success = success && result.isSuccess();
             if (!result.isSuccess()) {
-                msgBuilder.append(result.getMessage());
+                msgBuilder.append(result.getMessage()).append(" ");
             }
             validateResults.add(result.getExtra());
         }
@@ -41,7 +41,7 @@ public class ValidateExecutor<E> {
             msgBuilder.delete(0, msgBuilder.length());
             msgBuilder.append("all field validated OK");
         } else {
-            msgBuilder.append("]");
+            msgBuilder.append("}");
         }
         return new Result<>(success, msgBuilder.toString(), validateResults);
     }
@@ -67,7 +67,7 @@ public class ValidateExecutor<E> {
             Object element = field.get(object);
             if (validator.getValidateElementType().isInstance(field.get(object)) &&
                     CheckUtils.isNotNull(field.getAnnotation(validator.getAnnotationType()))) {
-                return validator.validate(validator.getValidateElementType().cast(element),
+                return validator.validate(field.getName(), validator.getValidateElementType().cast(element),
                         field.getAnnotation(validator.getAnnotationType()));
             } else {
                 return new Result<>(false,

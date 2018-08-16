@@ -6,7 +6,7 @@ import com.corkili.pa.common.dto.Result;
 
 public interface Validator<E, A extends Annotation> {
 
-    Result<ValidateResult> validate(E element, A annotation);
+    Result<ValidateResult> validate(String fieldName, E element, A constraint);
 
     Class<E> getValidateElementType();
 

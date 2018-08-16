@@ -49,7 +49,7 @@ public class DefaultValidateDriver implements ValidateDriver {
         ValidateExecutor<T> validateExecutor = new ValidateExecutor<>(clazz);
         boolean success = true;
         Field[] fields = clazz.getDeclaredFields();
-
+        
         return success;
     }
 
