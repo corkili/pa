@@ -118,7 +118,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
 
     private boolean validateLengthRange(String fieldName, String element,
                                         StringConstraint constraint, ValidateResult result) {
-        Rule rule = StringRuleFactory.lengthRule(fieldName, constraint);
+        Rule rule = StringRuleFactory.lengthRangeRule(fieldName, constraint);
         int min = constraint.minLength();
         int max = constraint.maxLength();
         min = min < 0 ? 0 : min;

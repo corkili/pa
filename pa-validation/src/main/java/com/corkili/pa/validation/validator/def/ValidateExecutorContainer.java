@@ -3,6 +3,8 @@ package com.corkili.pa.validation.validator.def;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.corkili.pa.common.util.CheckUtils;
+
 public class ValidateExecutorContainer {
 
     private static ValidateExecutorContainer instance;
@@ -30,6 +32,14 @@ public class ValidateExecutorContainer {
 
     public ValidateExecutor<?> getExecutorFor(Class<?> clazz) {
         return executorMap.get(clazz);
+    }
+
+    public boolean addExecutor(Class<?> clazz, ValidateExecutor<?> validateExecutor) {
+        if (CheckUtils.hasNull(clazz, validateExecutor)) {
+            return false;
+        }
+        executorMap.put(clazz, validateExecutor);
+        return true;
     }
 
 }

@@ -10,10 +10,13 @@ import com.corkili.pa.validation.annotation.Validated;
 import com.corkili.pa.validation.validator.ValidateDriver;
 import com.corkili.pa.validation.validator.ValidateDriverManager;
 import com.corkili.pa.validation.validator.ValidateResult;
+import com.corkili.pa.validation.validator.ValidatorFactory;
+import com.corkili.pa.validation.validator.impl.DefaultValidatorFactory;
 
 public class DefaultValidateDriver implements ValidateDriver {
 
     private ValidateExecutorContainer executorContainer;
+    private ValidatorFactory validatorFactory;
 
     static {
         ValidateDriverManager.getInstance().registry(
@@ -23,6 +26,7 @@ public class DefaultValidateDriver implements ValidateDriver {
 
     private DefaultValidateDriver() {
         executorContainer = ValidateExecutorContainer.getInstance();
+        validatorFactory = DefaultValidatorFactory.getInstance();
     }
 
     @Override
@@ -47,9 +51,16 @@ public class DefaultValidateDriver implements ValidateDriver {
 
     private <T> boolean initExecutor(Class<T> clazz) {
         ValidateExecutor<T> validateExecutor = new ValidateExecutor<>(clazz);
-        boolean success = true;
-        Field[] fields = clazz.getDeclaredFields();
-        
+        boolean success;
+        try {
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                validateExecutor.add(field, validatorFactory.getValidatorByClass(field.getType()));
+            }
+            success = executorContainer.addExecutor(clazz, validateExecutor);
+        } catch (Exception e) {
+            success = false;
+        }
         return success;
     }
 

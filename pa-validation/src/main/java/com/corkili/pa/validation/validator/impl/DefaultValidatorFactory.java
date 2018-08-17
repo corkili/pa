@@ -33,10 +33,10 @@ public class DefaultValidatorFactory implements ValidatorFactory {
 
     @Override
     @SuppressWarnings("unchecked")
-    public <E, A extends Annotation> Validator<E, A> getValidatorByClass(Class<E> elementClazz, Class<A> constraintClazz) {
+    public <E> Validator<E, ? extends Annotation> getValidatorByClass(Class<E> elementClazz) {
         try {
             if (validators.containsKey(elementClazz)) {
-                return (Validator<E, A>) validators.get(elementClazz);
+                return (Validator<E, ?>) validators.get(elementClazz);
             }
         } catch (Exception e) {
             throw new ValidationException(IUtils.format("no validator for {} ", elementClazz.getName()), e);
@@ -45,6 +45,7 @@ public class DefaultValidatorFactory implements ValidatorFactory {
     }
 
     private void loadValidator() {
+        // TODO (corkili): load Validator
         validators.put(String.class, StringValidator.getInstance());
     }
 }
