@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
+import com.corkili.pa.validation.annotation.IntRange;
 import com.corkili.pa.validation.annotation.StringConstraint;
 
 public abstract class StringRuleFactory {
@@ -53,19 +54,18 @@ public abstract class StringRuleFactory {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
-        String describe;
-        int min = constraint.minLength();
-        int max = constraint.maxLength();
-        if (min < 0 && max < 0) {
-            describe = IUtils.format("length's range of \"{}\" is unlimited", fieldName);
-        } else if (min < 0 && max > 0) {
-            describe = IUtils.format("length's range of \"{}\" is [unlimited, {}]", fieldName, max);
-        } else if (min > 0 && max < 0) {
-            describe = IUtils.format("length's range of \"{}\" is [{}, unlimited]", fieldName, min);
+        StringBuilder describe;
+        IntRange[] ranges = constraint.lengthRanges();
+        if (ranges.length == 0) {
+            describe = new StringBuilder(IUtils.format("length's range of \"{}\" is unlimited", fieldName));
         } else {
-            describe = IUtils.format("length's range of \"{}\" is [{}, {}]", fieldName, min, max);
+            describe = new StringBuilder(IUtils.format("length's range of \"{}\" is", fieldName));
+            for (IntRange range : ranges) {
+                describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
+            }
+
         }
-        return new Rule(String.class, fieldName, describe);
+        return new Rule(String.class, fieldName, describe.toString());
     }
 
     public static Rule valueRangeRule(String fieldName, StringConstraint constraint) {

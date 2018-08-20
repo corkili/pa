@@ -17,9 +17,7 @@ public @interface StringConstraint {
 
     int length() default -1;
 
-    int minLength() default -1;
-
-    int maxLength() default -1;
+    IntRange[] lengthRanges() default {};
 
     String[] valueRange() default {};
 

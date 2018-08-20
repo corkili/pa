@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import com.corkili.pa.common.dto.Pair;
 import com.corkili.pa.common.dto.Result;
+import com.corkili.pa.validation.annotation.IntRange;
 import com.corkili.pa.validation.annotation.StringConstraint;
 import com.corkili.pa.validation.rule.Rule;
 import com.corkili.pa.validation.rule.RuleFactory;
@@ -119,12 +120,14 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
     private boolean validateLengthRange(String fieldName, String element,
                                         StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.lengthRangeRule(fieldName, constraint);
-        int min = constraint.minLength();
-        int max = constraint.maxLength();
-        min = min < 0 ? 0 : min;
-        max = max < 0 ? Integer.MIN_VALUE : max;
-        int length = element.length();
-        boolean success = min <= length && length <= max;
+        boolean success = true;
+        IntRange[] ranges = constraint.lengthRanges();
+        if (ranges.length != 0) {
+            int length = element.length();
+            for (IntRange range : ranges) {
+                success = success && range.min() <= length && length <= range.max();
+            }
+        }
         result.put(rule, getResultPair(success, rule, fieldName));
         return success;
     }
