@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.corkili.pa.validation.annotation.IntRange;
 import com.corkili.pa.validation.annotation.StringConstraint;
 import com.corkili.pa.validation.annotation.ValidateMethod;
@@ -210,9 +212,15 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
     @ValidateMethod
     private boolean validateRegex(String fieldName, String element,
                                  StringConstraint constraint, ValidateResult result) {
-        Rule rule = StringRuleFactory.regex(fieldName, constraint);
-        Pattern pattern = getPattern(constraint.regex());
-        boolean success = pattern.matcher(element).matches();
+        Rule rule = StringRuleFactory.regexRule(fieldName, constraint);
+        boolean success;
+        String regex = constraint.regex();
+        if (StringUtils.isBlank(regex)) {
+            success = true;
+        } else {
+            Pattern pattern = getPattern(regex);
+            success = pattern.matcher(element).matches();
+        }
         result.put(rule, getResultPair(success, rule, fieldName));
         return success;
     }

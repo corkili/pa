@@ -9,7 +9,6 @@ import java.lang.reflect.Method;
 import com.corkili.pa.common.dto.Pair;
 import com.corkili.pa.common.dto.Result;
 import com.corkili.pa.common.util.IUtils;
-import com.corkili.pa.validation.annotation.StringConstraint;
 import com.corkili.pa.validation.annotation.ValidateMethod;
 import com.corkili.pa.validation.exception.ValidationException;
 import com.corkili.pa.validation.rule.Rule;
@@ -69,12 +68,16 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
 
     private boolean invokeValidateMethod(Method method, String fieldName, E element,
                                          A constraint, ValidateResult validateResult) {
+        boolean isAccessible = method.isAccessible();
         try {
+            method.setAccessible(true);
             return (boolean) method.invoke(getValidator(), fieldName, element, constraint, validateResult)
                     || !assertModel;
         } catch (Exception e) {
             throw new ValidationException(IUtils.format("parameters of method \"{}\" is not " +
                             "(String, ElementType, ConstraintAnnotation, ValidateResult)", method.getName()), e);
+        } finally {
+            method.setAccessible(isAccessible);
         }
     }
 }

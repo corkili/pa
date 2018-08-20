@@ -149,16 +149,16 @@ public abstract class StringRuleFactory {
         return new Rule(String.class, fieldName, describe);
     }
 
-    public static Rule regex(String fieldName, StringConstraint constraint) {
+    public static Rule regexRule(String fieldName, StringConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
         String describe;
         String regex = constraint.regex();
         if (StringUtils.isBlank(regex)) {
-            describe = IUtils.format("\"{}\" is not unlimited", fieldName);
+            describe = IUtils.format("\"{}\" is not unlimited by regexRule", fieldName);
         } else {
-            describe = IUtils.format("\"{}\" should be conform to regex \"{}\"", fieldName, regex);
+            describe = IUtils.format("\"{}\" should be conform to regexRule \"{}\"", fieldName, regex);
         }
         return new Rule(String.class, fieldName, describe);
     }
