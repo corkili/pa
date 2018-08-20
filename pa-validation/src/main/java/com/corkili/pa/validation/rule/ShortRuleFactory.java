@@ -4,12 +4,12 @@ import java.util.Arrays;
 
 import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
-import com.corkili.pa.validation.annotation.IntConstraint;
-import com.corkili.pa.validation.annotation.IntRange;
+import com.corkili.pa.validation.annotation.ShortConstraint;
+import com.corkili.pa.validation.annotation.ShortRange;
 
-public abstract class IntRuleFactory {
+public abstract class ShortRuleFactory {
 
-    public static Rule notNullRule(String fieldName, IntConstraint constraint) {
+    public static Rule notNullRule(String fieldName, ShortConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
@@ -19,39 +19,39 @@ public abstract class IntRuleFactory {
         } else {
             describe = IUtils.format("\"{}\" can be null", fieldName);
         }
-        return new Rule(Integer.class, fieldName, describe);
+        return new Rule(Short.class, fieldName, describe);
     }
 
-    public static Rule valueRangeRule(String fieldName, IntConstraint constraint) {
+    public static Rule valueRangeRule(String fieldName, ShortConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
         String describe;
-        int[] values = constraint.valueRange();
+        short[] values = constraint.valueRange();
         if (values.length == 0) {
             describe = IUtils.format("value of \"{}\" is unlimited", fieldName);
         } else {
             describe = IUtils.format("value of \"{}\" should in {}", fieldName, Arrays.toString(values));
         }
-        return new Rule(Integer.class, fieldName, describe);
+        return new Rule(Short.class, fieldName, describe);
     }
 
-    public static Rule rangeRule(String fieldName, IntConstraint constraint) {
+    public static Rule rangeRule(String fieldName, ShortConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
         StringBuilder describe;
-        IntRange[] ranges = constraint.ranges();
+        ShortRange[] ranges = constraint.ranges();
         if (ranges.length == 0) {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is unlimited", fieldName));
         } else {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is", fieldName));
-            for (IntRange range : ranges) {
+            for (ShortRange range : ranges) {
                 describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
             }
 
         }
-        return new Rule(Integer.class, fieldName, describe.toString());
+        return new Rule(Short.class, fieldName, describe.toString());
     }
 
 }
