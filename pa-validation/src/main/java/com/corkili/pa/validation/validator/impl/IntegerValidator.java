@@ -15,6 +15,22 @@ import com.corkili.pa.validation.validator.ValidateResult;
 
 public class IntegerValidator extends AbstractValidator<Integer, IntConstraint> {
 
+    private static IntegerValidator instance;
+    
+    static IntegerValidator getInstance() {
+        if (instance == null) {
+            synchronized (IntegerValidator.class) {
+                if (instance == null) {
+                    instance = new IntegerValidator();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private IntegerValidator() {
+    }
+    
     @Override
     public Result<ValidateResult> validate(String fieldName, Integer element, IntConstraint constraint) {
         ValidateResult validateResult = new ValidateResult();

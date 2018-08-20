@@ -15,6 +15,22 @@ import com.corkili.pa.validation.validator.ValidateResult;
 
 public class ShortValidator extends AbstractValidator<Short, ShortConstraint> {
 
+    private static ShortValidator instance;
+
+    static ShortValidator getInstance() {
+        if (instance == null) {
+            synchronized (ShortValidator.class) {
+                if (instance == null) {
+                    instance = new ShortValidator();
+                }
+            }
+        }
+        return instance;
+    }
+
+    private ShortValidator() {
+    }
+    
     @Override
     public Result<ValidateResult> validate(String fieldName, Short element, ShortConstraint constraint) {
         ValidateResult validateResult = new ValidateResult();
