@@ -9,19 +9,6 @@ import com.corkili.pa.validation.annotation.IntRange;
 
 public abstract class IntRuleFactory {
 
-    public static Rule notNullRule(String fieldName, IntConstraint constraint) {
-        if (CheckUtils.hasNull(fieldName, constraint)) {
-            return Rule.EMPTY_RULE;
-        }
-        String describe;
-        if (constraint.notNull()) {
-            describe = IUtils.format("\"{}\" should not be null", fieldName);
-        } else {
-            describe = IUtils.format("\"{}\" can be null", fieldName);
-        }
-        return new Rule(Integer.class, fieldName, describe);
-    }
-
     public static Rule valueRangeRule(String fieldName, IntConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;

@@ -11,19 +11,6 @@ import com.corkili.pa.validation.annotation.StringConstraint;
 
 public abstract class StringRuleFactory {
 
-    public static Rule notNullRule(String fieldName, StringConstraint constraint) {
-        if (CheckUtils.hasNull(fieldName, constraint)) {
-            return Rule.EMPTY_RULE;
-        }
-        String describe;
-        if (constraint.notNull()) {
-            describe = IUtils.format("\"{}\" should not be null", fieldName);
-        } else {
-            describe = IUtils.format("\"{}\" can be null", fieldName);
-        }
-        return new Rule(String.class, fieldName, describe);
-    }
-
     public static Rule notEmptyRule(String fieldName, StringConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
