@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import com.corkili.pa.common.dto.Result;
 import com.corkili.pa.common.util.CheckUtils;
@@ -81,5 +82,25 @@ public class ValidateExecutor<E> {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValidateExecutor<?> that = (ValidateExecutor<?>) o;
+        return Objects.equals(objectType, that.objectType) &&
+                Objects.equals(validatorMap, that.validatorMap);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(objectType, validatorMap);
+    }
+
+    @Override
+    public String toString() {
+        return "ValidateExecutor{" +
+                "objectType=" + objectType +
+                ", validatorMap=" + validatorMap +
+                '}';
+    }
 }
