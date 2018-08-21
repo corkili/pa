@@ -6,6 +6,7 @@ import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.ShortConstraint;
 import com.corkili.pa.validation.annotation.ShortRange;
+import com.corkili.pa.validation.util.RangeUtil;
 
 public abstract class ShortRuleFactory {
 
@@ -34,9 +35,10 @@ public abstract class ShortRuleFactory {
         } else {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is", fieldName));
             for (ShortRange range : ranges) {
-                describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
+                describe.append(IUtils.format(" " +
+                        RangeUtil.generateRangeFormatString(range.minInclude(), range.maxInclude()),
+                        range.min(), range.max()));
             }
-
         }
         return new Rule(Short.class, fieldName, describe.toString());
     }

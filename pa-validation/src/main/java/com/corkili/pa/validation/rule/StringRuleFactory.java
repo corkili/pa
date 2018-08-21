@@ -8,6 +8,7 @@ import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.IntRange;
 import com.corkili.pa.validation.annotation.StringConstraint;
+import com.corkili.pa.validation.util.RangeUtil;
 
 public abstract class StringRuleFactory {
 
@@ -48,7 +49,9 @@ public abstract class StringRuleFactory {
         } else {
             describe = new StringBuilder(IUtils.format("length's range of \"{}\" is", fieldName));
             for (IntRange range : ranges) {
-                describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
+                describe.append(IUtils.format(" " +
+                        RangeUtil.generateRangeFormatString(range.minInclude(), range.maxInclude()),
+                        range.min(), range.max()));
             }
 
         }

@@ -6,6 +6,7 @@ import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.LongConstraint;
 import com.corkili.pa.validation.annotation.LongRange;
+import com.corkili.pa.validation.util.RangeUtil;
 
 public abstract class LongRuleFactory {
 
@@ -34,7 +35,9 @@ public abstract class LongRuleFactory {
         } else {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is", fieldName));
             for (LongRange range : ranges) {
-                describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
+                describe.append(IUtils.format(" " +
+                        RangeUtil.generateRangeFormatString(range.minInclude(), range.maxInclude()),
+                        range.min(), range.max()));
             }
 
         }
