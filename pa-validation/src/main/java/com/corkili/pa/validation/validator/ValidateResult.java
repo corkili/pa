@@ -3,6 +3,7 @@ package com.corkili.pa.validation.validator;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import com.corkili.pa.common.dto.Pair;
@@ -38,4 +39,23 @@ public final class ValidateResult {
         return IUtils.format(SUCCESS_MESSAGE_TEMPLATE, fieldName);
     }
 
+    @Override
+    public String toString() {
+        return "ValidateResult{" +
+                "resultMap=" + resultMap +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ValidateResult that = (ValidateResult) o;
+        return Objects.equals(resultMap, that.resultMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(resultMap);
+    }
 }

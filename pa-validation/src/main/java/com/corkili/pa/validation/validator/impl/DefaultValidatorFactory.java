@@ -47,5 +47,15 @@ public class DefaultValidatorFactory implements ValidatorFactory {
     private void loadValidator() {
         // TODO (corkili): load Validator
         validators.put(String.class, StringValidator.getInstance());
+        validators.put(Short.class, ShortValidator.getInstance());
+        validators.put(short.class, ShortValidator.getInstance());
+        validators.put(Integer.class, IntegerValidator.getInstance());
+        validators.put(int.class, IntegerValidator.getInstance());
+        validators.put(Long.class, LongValidator.getInstance());
+        validators.put(long.class, LongValidator.getInstance());
+        validators.put(Float.class, FloatValidator.getInstance());
+        validators.put(float.class, FloatValidator.getInstance());
+        validators.put(Double.class, DoubleValidator.getInstance());
+        validators.put(double.class, DoubleValidator.getInstance());
     }
 }

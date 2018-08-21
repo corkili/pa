@@ -6,21 +6,9 @@ import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.IntConstraint;
 import com.corkili.pa.validation.annotation.IntRange;
+import com.corkili.pa.validation.util.RangeUtil;
 
 public abstract class IntRuleFactory {
-
-    public static Rule notNullRule(String fieldName, IntConstraint constraint) {
-        if (CheckUtils.hasNull(fieldName, constraint)) {
-            return Rule.EMPTY_RULE;
-        }
-        String describe;
-        if (constraint.notNull()) {
-            describe = IUtils.format("\"{}\" should not be null", fieldName);
-        } else {
-            describe = IUtils.format("\"{}\" can be null", fieldName);
-        }
-        return new Rule(Integer.class, fieldName, describe);
-    }
 
     public static Rule valueRangeRule(String fieldName, IntConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
@@ -47,7 +35,9 @@ public abstract class IntRuleFactory {
         } else {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is", fieldName));
             for (IntRange range : ranges) {
-                describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
+                describe.append(IUtils.format(" " +
+                        RangeUtil.generateRangeFormatString(range.minInclude(), range.maxInclude()),
+                        range.min(), range.max()));
             }
 
         }

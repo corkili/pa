@@ -9,14 +9,10 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ShortRange {
+public @interface FloatValue {
 
-    short min() default Short.MIN_VALUE;
+    float value() default 0;
 
-    boolean minInclude() default true;
-
-    short max() default Short.MAX_VALUE;
-
-    boolean maxInclude() default true;
+    float precision() default 0.000001f;
 
 }

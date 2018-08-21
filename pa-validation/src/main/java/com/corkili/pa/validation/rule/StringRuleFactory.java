@@ -8,21 +8,9 @@ import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.IntRange;
 import com.corkili.pa.validation.annotation.StringConstraint;
+import com.corkili.pa.validation.util.RangeUtil;
 
 public abstract class StringRuleFactory {
-
-    public static Rule notNullRule(String fieldName, StringConstraint constraint) {
-        if (CheckUtils.hasNull(fieldName, constraint)) {
-            return Rule.EMPTY_RULE;
-        }
-        String describe;
-        if (constraint.notNull()) {
-            describe = IUtils.format("\"{}\" should not be null", fieldName);
-        } else {
-            describe = IUtils.format("\"{}\" can be null", fieldName);
-        }
-        return new Rule(String.class, fieldName, describe);
-    }
 
     public static Rule notEmptyRule(String fieldName, StringConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
@@ -61,7 +49,9 @@ public abstract class StringRuleFactory {
         } else {
             describe = new StringBuilder(IUtils.format("length's range of \"{}\" is", fieldName));
             for (IntRange range : ranges) {
-                describe.append(IUtils.format(" [{}, {}]", range.min(), range.max()));
+                describe.append(IUtils.format(" " +
+                        RangeUtil.generateRangeFormatString(range.minInclude(), range.maxInclude()),
+                        range.min(), range.max()));
             }
 
         }
@@ -162,16 +152,16 @@ public abstract class StringRuleFactory {
         return new Rule(String.class, fieldName, describe);
     }
 
-    public static Rule regex(String fieldName, StringConstraint constraint) {
+    public static Rule regexRule(String fieldName, StringConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
         String describe;
         String regex = constraint.regex();
         if (StringUtils.isBlank(regex)) {
-            describe = IUtils.format("\"{}\" is not unlimited", fieldName);
+            describe = IUtils.format("\"{}\" is not unlimited by regexRule", fieldName);
         } else {
-            describe = IUtils.format("\"{}\" should be conform to regex \"{}\"", fieldName, regex);
+            describe = IUtils.format("\"{}\" should be conform to regexRule \"{}\"", fieldName, regex);
         }
         return new Rule(String.class, fieldName, describe);
     }

@@ -4,43 +4,44 @@ import java.util.Arrays;
 
 import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
-import com.corkili.pa.validation.annotation.ShortConstraint;
-import com.corkili.pa.validation.annotation.ShortRange;
+import com.corkili.pa.validation.annotation.LongConstraint;
+import com.corkili.pa.validation.annotation.LongRange;
 import com.corkili.pa.validation.util.RangeUtil;
 
-public abstract class ShortRuleFactory {
+public abstract class LongRuleFactory {
 
-    public static Rule valueRangeRule(String fieldName, ShortConstraint constraint) {
+    public static Rule valueRangeRule(String fieldName, LongConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
         String describe;
-        short[] values = constraint.valueRange();
+        long[] values = constraint.valueRange();
         if (values.length == 0) {
             describe = IUtils.format("value of \"{}\" is unlimited", fieldName);
         } else {
             describe = IUtils.format("value of \"{}\" should in {}", fieldName, Arrays.toString(values));
         }
-        return new Rule(Short.class, fieldName, describe);
+        return new Rule(Long.class, fieldName, describe);
     }
 
-    public static Rule rangeRule(String fieldName, ShortConstraint constraint) {
+    public static Rule rangeRule(String fieldName, LongConstraint constraint) {
         if (CheckUtils.hasNull(fieldName, constraint)) {
             return Rule.EMPTY_RULE;
         }
         StringBuilder describe;
-        ShortRange[] ranges = constraint.ranges();
+        LongRange[] ranges = constraint.ranges();
         if (ranges.length == 0) {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is unlimited", fieldName));
         } else {
             describe = new StringBuilder(IUtils.format("range of \"{}\" is", fieldName));
-            for (ShortRange range : ranges) {
+            for (LongRange range : ranges) {
                 describe.append(IUtils.format(" " +
                         RangeUtil.generateRangeFormatString(range.minInclude(), range.maxInclude()),
                         range.min(), range.max()));
             }
+
         }
-        return new Rule(Short.class, fieldName, describe.toString());
+        return new Rule(Long.class, fieldName, describe.toString());
     }
 
 }

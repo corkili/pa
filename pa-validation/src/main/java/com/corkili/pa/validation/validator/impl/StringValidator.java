@@ -1,20 +1,18 @@
 package com.corkili.pa.validation.validator.impl;
 
-import static com.corkili.pa.validation.validator.Validators.buildResult;
 import static com.corkili.pa.validation.validator.Validators.getResultPair;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-import com.corkili.pa.common.dto.Pair;
-import com.corkili.pa.common.dto.Result;
+import org.apache.commons.lang.StringUtils;
+
 import com.corkili.pa.validation.annotation.IntRange;
 import com.corkili.pa.validation.annotation.StringConstraint;
+import com.corkili.pa.validation.annotation.ValidateMethod;
 import com.corkili.pa.validation.rule.Rule;
-import com.corkili.pa.validation.rule.RuleFactory;
 import com.corkili.pa.validation.rule.StringRuleFactory;
-import com.corkili.pa.validation.validator.AbstractValidator;
 import com.corkili.pa.validation.validator.ValidateResult;
 
 public class StringValidator extends AbstractValidator<String, StringConstraint> {
@@ -39,47 +37,13 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
     }
 
     @Override
-    public Result<ValidateResult> validate(String fieldName, String element, StringConstraint constraint) {
-        ValidateResult validateResult = new ValidateResult();
-        if (!validateNotNull(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (element == null) {
-            Rule nullRule = RuleFactory.FieldNullRule(String.class, fieldName);
-            validateResult.put(nullRule, new Pair<>(true, nullRule.getDescribe()));
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateNotEmpty(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateLength(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateLengthRange(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateValueRange(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateContains(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateNotContains(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateStartWith(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateEndWith(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateCase(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        if (!validateRegex(fieldName, element, constraint, validateResult) && isAssert()) {
-            return buildResult(fieldName, validateResult);
-        }
-        return buildResult(fieldName, validateResult);
+    protected Class<?> getValidatorClass() {
+        return StringValidator.class;
+    }
+
+    @Override
+    protected AbstractValidator getValidator() {
+        return this;
     }
 
     @Override
@@ -92,14 +56,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return StringConstraint.class;
     }
 
-    private boolean validateNotNull(String fieldName, String element,
-                                    StringConstraint constraint, ValidateResult result) {
-        Rule rule = StringRuleFactory.notNullRule(fieldName, constraint);
-        boolean success = !constraint.notNull() || element != null;
-        result.put(rule, getResultPair(success, rule, fieldName));
-        return success;
-    }
-
+    @ValidateMethod
     private boolean validateNotEmpty(String fieldName, String element,
                                      StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.notEmptyRule(fieldName, constraint);
@@ -108,6 +65,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateLength(String fieldName, String element,
                                    StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.lengthRule(fieldName, constraint);
@@ -117,6 +75,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateLengthRange(String fieldName, String element,
                                         StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.lengthRangeRule(fieldName, constraint);
@@ -125,13 +84,22 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         if (ranges.length != 0) {
             int length = element.length();
             for (IntRange range : ranges) {
-                success = success && range.min() <= length && length <= range.max();
+                if (range.minInclude() && range.maxInclude()) {
+                    success = success && range.min() <= length && length <= range.max();
+                } else if (range.minInclude() && !range.maxInclude()) {
+                    success = success && range.min() <= length && length < range.max();
+                } else if (!range.minInclude() && range.maxInclude()) {
+                    success = success && range.min() < length && length <= range.max();
+                } else {
+                    success = success && range.min() < length && length < range.max();
+                }
             }
         }
         result.put(rule, getResultPair(success, rule, fieldName));
         return success;
     }
 
+    @ValidateMethod
     private boolean validateValueRange(String fieldName, String element,
                                        StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.valueRangeRule(fieldName, constraint);
@@ -150,6 +118,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateContains(String fieldName, String element,
                                        StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.containsRule(fieldName, constraint);
@@ -169,6 +138,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateNotContains(String fieldName, String element,
                                      StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.notContainsRule(fieldName, constraint);
@@ -186,6 +156,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateStartWith(String fieldName, String element,
                                         StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.startWithRule(fieldName, constraint);
@@ -205,6 +176,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateEndWith(String fieldName, String element,
                                     StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.endWithRule(fieldName, constraint);
@@ -224,6 +196,7 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateCase(String fieldName, String element,
                                     StringConstraint constraint, ValidateResult result) {
         Rule rule = StringRuleFactory.caseRule(fieldName, constraint);
@@ -244,11 +217,18 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         return success;
     }
 
+    @ValidateMethod
     private boolean validateRegex(String fieldName, String element,
                                  StringConstraint constraint, ValidateResult result) {
-        Rule rule = StringRuleFactory.regex(fieldName, constraint);
-        Pattern pattern = getPattern(constraint.regex());
-        boolean success = pattern.matcher(element).matches();
+        Rule rule = StringRuleFactory.regexRule(fieldName, constraint);
+        boolean success;
+        String regex = constraint.regex();
+        if (StringUtils.isBlank(regex)) {
+            success = true;
+        } else {
+            Pattern pattern = getPattern(regex);
+            success = pattern.matcher(element).matches();
+        }
         result.put(rule, getResultPair(success, rule, fieldName));
         return success;
     }

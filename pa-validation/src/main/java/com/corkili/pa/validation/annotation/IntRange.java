@@ -13,6 +13,10 @@ public @interface IntRange {
 
     int min() default Integer.MIN_VALUE;
 
+    boolean minInclude() default true;
+
     int max() default Integer.MAX_VALUE;
+
+    boolean maxInclude() default true;
 
 }
