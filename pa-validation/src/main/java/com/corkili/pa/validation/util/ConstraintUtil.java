@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.corkili.pa.validation.annotation.DoubleConstraint;
 import com.corkili.pa.validation.annotation.FloatConstraint;
 import com.corkili.pa.validation.annotation.IntConstraint;
 import com.corkili.pa.validation.annotation.LongConstraint;
@@ -20,7 +21,8 @@ public abstract class ConstraintUtil {
         constraints = new HashSet<>();
         // TODO(corkili): add Constraint class
         constraints.addAll(Arrays.asList(StringConstraint.class, ShortConstraint.class,
-                IntConstraint.class, LongConstraint.class, FloatConstraint.class));
+                IntConstraint.class, LongConstraint.class, FloatConstraint.class,
+                DoubleConstraint.class));
     }
 
     public static boolean isValidatedField(AnnotatedElement element) {

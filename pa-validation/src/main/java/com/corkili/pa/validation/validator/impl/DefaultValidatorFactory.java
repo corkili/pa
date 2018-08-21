@@ -55,5 +55,7 @@ public class DefaultValidatorFactory implements ValidatorFactory {
         validators.put(long.class, LongValidator.getInstance());
         validators.put(Float.class, FloatValidator.getInstance());
         validators.put(float.class, FloatValidator.getInstance());
+        validators.put(Double.class, DoubleValidator.getInstance());
+        validators.put(double.class, DoubleValidator.getInstance());
     }
 }
