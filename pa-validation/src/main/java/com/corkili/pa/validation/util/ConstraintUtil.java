@@ -1,12 +1,13 @@
 package com.corkili.pa.validation.util;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
+import java.lang.reflect.AnnotatedElement;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.corkili.pa.validation.annotation.IntConstraint;
+import com.corkili.pa.validation.annotation.LongConstraint;
 import com.corkili.pa.validation.annotation.ShortConstraint;
 import com.corkili.pa.validation.annotation.StringConstraint;
 
@@ -16,12 +17,13 @@ public abstract class ConstraintUtil {
 
     static {
         constraints = new HashSet<>();
+        // TODO(corkili): add Constraint class
         constraints.addAll(Arrays.asList(StringConstraint.class, ShortConstraint.class,
-                IntConstraint.class));
+                IntConstraint.class, LongConstraint.class));
     }
 
-    public static boolean isValidatedField(Field field) {
-        Annotation[] annotations = field.getDeclaredAnnotations();
+    public static boolean isValidatedField(AnnotatedElement element) {
+        Annotation[] annotations = element.getDeclaredAnnotations();
         boolean success = false;
         for (Annotation annotation : annotations) {
             if (constraints.contains(annotation.annotationType())) {

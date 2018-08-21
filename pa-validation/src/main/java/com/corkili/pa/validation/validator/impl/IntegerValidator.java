@@ -48,7 +48,7 @@ public class IntegerValidator extends AbstractValidator<Integer, IntConstraint> 
     }
 
     @ValidateMethod
-    private boolean validateIntValueRange(String fieldName, int element,
+    private boolean validateValueRange(String fieldName, int element,
                                        IntConstraint constraint, ValidateResult result) {
         Rule rule = IntRuleFactory.valueRangeRule(fieldName, constraint);
         int[] values = constraint.valueRange();
@@ -67,7 +67,7 @@ public class IntegerValidator extends AbstractValidator<Integer, IntConstraint> 
     }
 
     @ValidateMethod
-    private boolean validateIntRange(String fieldName, int element,
+    private boolean validateRange(String fieldName, int element,
                                         IntConstraint constraint, ValidateResult result) {
         Rule rule = IntRuleFactory.rangeRule(fieldName, constraint);
         boolean success = true;

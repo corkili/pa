@@ -48,7 +48,7 @@ public class ShortValidator extends AbstractValidator<Short, ShortConstraint> {
     }
 
     @ValidateMethod
-    private boolean validateShortValueRange(String fieldName, short element,
+    private boolean validateValueRange(String fieldName, short element,
                                             ShortConstraint constraint, ValidateResult result) {
         Rule rule = ShortRuleFactory.valueRangeRule(fieldName, constraint);
         short[] values = constraint.valueRange();
@@ -67,7 +67,7 @@ public class ShortValidator extends AbstractValidator<Short, ShortConstraint> {
     }
 
     @ValidateMethod
-    private boolean validateShortRange(String fieldName, short element,
+    private boolean validateRange(String fieldName, short element,
                                        ShortConstraint constraint, ValidateResult result) {
         Rule rule = ShortRuleFactory.rangeRule(fieldName, constraint);
         boolean success = true;
