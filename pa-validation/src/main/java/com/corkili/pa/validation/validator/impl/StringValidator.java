@@ -84,7 +84,15 @@ public class StringValidator extends AbstractValidator<String, StringConstraint>
         if (ranges.length != 0) {
             int length = element.length();
             for (IntRange range : ranges) {
-                success = success && range.min() <= length && length <= range.max();
+                if (range.minInclude() && range.maxInclude()) {
+                    success = success && range.min() <= length && length <= range.max();
+                } else if (range.minInclude() && !range.maxInclude()) {
+                    success = success && range.min() <= length && length < range.max();
+                } else if (!range.minInclude() && range.maxInclude()) {
+                    success = success && range.min() < length && length <= range.max();
+                } else {
+                    success = success && range.min() < length && length < range.max();
+                }
             }
         }
         result.put(rule, getResultPair(success, rule, fieldName));

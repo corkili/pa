@@ -13,6 +13,10 @@ public @interface ShortRange {
 
     short min() default Short.MIN_VALUE;
 
+    boolean minInclude() default true;
+
     short max() default Short.MAX_VALUE;
+
+    boolean maxInclude() default true;
 
 }

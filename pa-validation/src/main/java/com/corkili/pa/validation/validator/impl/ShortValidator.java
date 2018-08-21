@@ -74,7 +74,15 @@ public class ShortValidator extends AbstractValidator<Short, ShortConstraint> {
         ShortRange[] ranges = constraint.ranges();
         if (ranges.length != 0) {
             for (ShortRange range : ranges) {
-                success = success && range.min() <= element && element <= range.max();
+                if (range.minInclude() && range.maxInclude()) {
+                    success = success && range.min() <= element && element <= range.max();
+                } else if (range.minInclude() && !range.maxInclude()) {
+                    success = success && range.min() <= element && element < range.max();
+                } else if (!range.minInclude() && !range.maxInclude()) {
+                    success = success && range.min() < element && element < range.max();
+                } else {
+                    success = success && range.min() < element && element <= range.max();
+                }
             }
         }
         result.put(rule, getResultPair(success, rule, fieldName));

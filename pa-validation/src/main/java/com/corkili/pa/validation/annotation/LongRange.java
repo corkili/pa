@@ -13,6 +13,10 @@ public @interface LongRange {
 
     long min() default Long.MIN_VALUE;
 
+    boolean minInclude() default true;
+
     long max() default Long.MAX_VALUE;
+
+    boolean maxInclude() default false;
 
 }
