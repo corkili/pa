@@ -28,6 +28,10 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
         this.assertModel = assertModel;
     }
 
+    public boolean isAssert() {
+        return this.assertModel;
+    }
+
     public Result<ValidateResult> validate(String fieldName, E element, A constraint) {
         ValidateResult validateResult = new ValidateResult();
         if (!validateNotNull(fieldName, element, constraint, validateResult) && assertModel) {
@@ -40,7 +44,7 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
         }
         Method[] methods = getValidatorClass().getDeclaredMethods();
         for (Method method : methods) {
-            if (method.getDeclaredAnnotation(ValidateMethod.class) != null) {
+            if (method.isAnnotationPresent(ValidateMethod.class)) {
                 if (!invokeValidateMethod(method, fieldName, element, constraint, validateResult)) {
                     return buildResult(fieldName, validateResult);
                 }
