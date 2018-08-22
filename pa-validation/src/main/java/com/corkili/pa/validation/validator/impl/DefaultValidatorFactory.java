@@ -57,5 +57,6 @@ public class DefaultValidatorFactory implements ValidatorFactory {
         validators.put(float.class, FloatValidator.getInstance());
         validators.put(Double.class, DoubleValidator.getInstance());
         validators.put(double.class, DoubleValidator.getInstance());
+        validators.put(Map.class, StrObjMapValidator.getInstance());
     }
 }

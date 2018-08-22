@@ -39,6 +39,10 @@ public final class ValidateResult {
         return IUtils.format(SUCCESS_MESSAGE_TEMPLATE, fieldName);
     }
 
+    public void mergeFrom(ValidateResult validateResult) {
+        validateResult.resultMap.forEach((key, value) -> this.resultMap.put(key, value));
+    }
+
     @Override
     public String toString() {
         return "ValidateResult{" +

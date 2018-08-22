@@ -11,6 +11,7 @@ import com.corkili.pa.validation.annotation.FloatConstraint;
 import com.corkili.pa.validation.annotation.IntConstraint;
 import com.corkili.pa.validation.annotation.LongConstraint;
 import com.corkili.pa.validation.annotation.ShortConstraint;
+import com.corkili.pa.validation.annotation.StrObjMapConstraint;
 import com.corkili.pa.validation.annotation.StringConstraint;
 
 public abstract class ConstraintUtil {
@@ -22,7 +23,7 @@ public abstract class ConstraintUtil {
         // TODO(corkili): add Constraint class
         constraints.addAll(Arrays.asList(StringConstraint.class, ShortConstraint.class,
                 IntConstraint.class, LongConstraint.class, FloatConstraint.class,
-                DoubleConstraint.class));
+                DoubleConstraint.class, StrObjMapConstraint.class));
     }
 
     public static boolean isValidatedField(AnnotatedElement element) {
