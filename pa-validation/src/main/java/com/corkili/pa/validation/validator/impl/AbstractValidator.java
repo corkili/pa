@@ -34,6 +34,9 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
 
     public Result<ValidateResult> validate(String fieldName, E element, A constraint) {
         ValidateResult validateResult = new ValidateResult();
+        if (!preprocess(fieldName, element, constraint, validateResult)) {
+            return buildResult(fieldName, validateResult);
+        }
         if (!validateNotNull(fieldName, element, constraint, validateResult) && assertModel) {
             return buildResult(fieldName, validateResult);
         }
@@ -56,6 +59,10 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
     protected abstract Class<?> getValidatorClass();
 
     protected abstract AbstractValidator getValidator();
+
+    protected boolean preprocess(String fieldName, E element, A constraint, ValidateResult result) {
+        return true;
+    }
 
     private boolean validateNotNull(String fieldName, E element, A constraint, ValidateResult result) {
         Rule rule = RuleFactory.notNullRule(fieldName, constraint, getValidateElementType());

@@ -1,10 +1,20 @@
 package com.corkili.pa.validation.rule;
 
+import java.util.Map;
+
 import com.corkili.pa.common.util.CheckUtils;
 import com.corkili.pa.common.util.IUtils;
 import com.corkili.pa.validation.annotation.StrObjMapValue;
 
 public abstract class StrObjMapRuleFactory {
+
+    public static Rule mapKeyTypeRUle(String fieldName) {
+        if (CheckUtils.isNull(fieldName)) {
+            return Rule.EMPTY_RULE;
+        }
+        return new Rule(Map.class, fieldName,
+                IUtils.format("key's type of \"{}\" should be java.lang.String", fieldName));
+    }
 
     public static Rule requiredRule(String fieldName, StrObjMapValue value) {
         if (CheckUtils.hasNull(fieldName, value)) {

@@ -52,6 +52,24 @@ public class StrObjMapValidator extends AbstractValidator<Map, StrObjMapConstrai
         return StrObjMapConstraint.class;
     }
 
+    @Override
+    protected boolean preprocess(String fieldName, Map element, StrObjMapConstraint constraint, ValidateResult result) {
+        boolean success = true;
+        if (element != null) {
+            for (Object key : element.keySet()) {
+                if (!(key instanceof String)) {
+                    success = false;
+                    break;
+                }
+            }
+        }
+        if (!success) {
+            Rule rule = StrObjMapRuleFactory.mapKeyTypeRUle(fieldName);
+            result.put(rule, getResultPair(false, rule, fieldName));
+        }
+        return success;
+    }
+
     @ValidateMethod
     private boolean validateAll(String fieldName, Map<String, Object> element,
                                      StrObjMapConstraint constraint, ValidateResult result) {
