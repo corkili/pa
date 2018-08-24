@@ -1,25 +1,30 @@
 package com.corkili.pa.common.config;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.corkili.pa.common.util.CheckUtils;
 
 public final class Config {
 
-    private Map<String, String> configMap;
+    private final Map<String, String> configMap;
 
     Config() {
-        configMap = new HashMap<>();
+        configMap = new ConcurrentHashMap<>();
     }
 
-    void setConfigMap(Map<String, String> configMap) {
+    void updateConfigMap(Map<String, String> configMap) {
         if (CheckUtils.isNotNull(configMap)) {
-            this.configMap = configMap;
+            this.configMap.clear();
+            this.configMap.putAll(configMap);
         }
     }
-    
+
+    public boolean containsConfig(String name) {
+        return configMap.containsKey(name);
+    }
+
     public String getString(String name, String defaultValue) {
         return configMap.getOrDefault(name, defaultValue);
     }
