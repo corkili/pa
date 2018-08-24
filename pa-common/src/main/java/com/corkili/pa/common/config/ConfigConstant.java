@@ -2,7 +2,9 @@ package com.corkili.pa.common.config;
 
 public final class ConfigConstant {
 
-    public static final String CONFIG_FILE_DEFAULT_AND_REQUIRED_CONFIG_FILE = "pa.yaml";
+    public static final String SYSTEM_CONFIGURE_CONF_FILE = "configure.conf.file";
+
+    public static final String DEFAULT_CONFIGURE_CONF_FILE = "./conf/pa.yaml";
 
     public static final String CONFIG_NAME_UPDATE_CONFIG_INTERVAL_SEC = "configure.manager.update.config.interval.sec";
 
