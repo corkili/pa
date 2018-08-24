@@ -1,0 +1,10 @@
+validator.assert.update.interval.sec: 5
+
+validator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.StringValidator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.ShortValidator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.IntegerValidator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.LongValidator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.FloatValidator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.DoubleValidator.assert.enable: true
+validator.com.corkili.pa.validation.validator.impl.StrObjMapValidator.assert.enable: true
