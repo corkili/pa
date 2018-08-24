@@ -18,7 +18,7 @@ import com.corkili.pa.validation.validator.Validator;
 
 public abstract class AbstractValidator<E, A extends Annotation> implements Validator<E, A> {
 
-    private boolean assertModel;
+    private volatile boolean assertModel;
 
     public AbstractValidator() {
         this.assertModel = false;
