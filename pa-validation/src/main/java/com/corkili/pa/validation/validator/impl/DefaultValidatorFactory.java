@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.corkili.pa.common.config.Config;
 import com.corkili.pa.common.config.ConfigManager;
@@ -29,6 +32,8 @@ public class DefaultValidatorFactory implements ValidatorFactory {
 
     private int updateConfInterval;
 
+    private ScheduledExecutorService executor;
+
     public static ValidatorFactory getInstance() {
         if (instance == null) {
             synchronized (DefaultValidatorFactory.class) {
@@ -45,8 +50,16 @@ public class DefaultValidatorFactory implements ValidatorFactory {
         validatorSet = new HashSet<>();
         configManager = ConfigManager.getInstance();
         config = configManager.getConfig();
+        executor = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setName("scheduled task to update config of validator");
+            t.setDaemon(true);
+            return t;
+        });
         loadValidator();
         loadConfig();
+        updateConfig();
+        initExecutor();
     }
 
     @Override
@@ -92,7 +105,12 @@ public class DefaultValidatorFactory implements ValidatorFactory {
         validatorSet.forEach(validator -> {
             Class<?> type = validator.getClass();
             String key = ConfigConstants.PREFIX + type.getName() + ConfigConstants.SUFFIX_ASSERT_ENABLE;
-
+            validator.setAssert(config.getBoolean(key, defaultAssert));
         });
     }
+
+    private void initExecutor() {
+        executor.scheduleWithFixedDelay(this::updateConfig, 0, updateConfInterval, TimeUnit.SECONDS);
+    }
+
 }

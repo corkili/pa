@@ -12,4 +12,8 @@ public interface Validator<E, A extends Annotation> {
 
     Class<A> getAnnotationType();
 
+    void setAssert(boolean isAssert);
+    
+    boolean isAssert();
+
 }

@@ -18,18 +18,19 @@ import com.corkili.pa.validation.validator.Validator;
 
 public abstract class AbstractValidator<E, A extends Annotation> implements Validator<E, A> {
 
-    private volatile boolean assertModel;
+    private volatile boolean isAssert;
 
     public AbstractValidator() {
-        this.assertModel = false;
+        this.isAssert = true;
     }
 
-    public void setAssertModel(boolean assertModel) {
-        this.assertModel = assertModel;
+    @Override
+    public void setAssert(boolean isAssert) {
+        this.isAssert = isAssert;
     }
 
     public boolean isAssert() {
-        return this.assertModel;
+        return this.isAssert;
     }
 
     public Result<ValidateResult> validate(String fieldName, E element, A constraint) {
@@ -37,7 +38,7 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
         if (!preprocess(fieldName, element, constraint, validateResult)) {
             return buildResult(fieldName, validateResult);
         }
-        if (!validateNotNull(fieldName, element, constraint, validateResult) && assertModel) {
+        if (!validateNotNull(fieldName, element, constraint, validateResult) && isAssert) {
             return buildResult(fieldName, validateResult);
         }
         if (element == null) {
@@ -83,7 +84,7 @@ public abstract class AbstractValidator<E, A extends Annotation> implements Vali
         try {
             method.setAccessible(true);
             return (boolean) method.invoke(getValidator(), fieldName, element, constraint, validateResult)
-                    || !assertModel;
+                    || !isAssert;
         } catch (Exception e) {
             throw new ValidationException(IUtils.format("parameters of method \"{}\" is not " +
                             "(String, ElementType, ConstraintAnnotation, ValidateResult)", method.getName()), e);
