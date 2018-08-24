@@ -12,6 +12,7 @@ import com.corkili.pa.common.config.loader.ConfigLoaderFactory;
 import com.corkili.pa.common.dto.Query;
 import com.corkili.pa.common.dto.Result;
 import com.corkili.pa.common.util.CheckUtils;
+import com.corkili.pa.common.util.IUtils;
 
 public final class ConfigManager {
 
@@ -43,13 +44,29 @@ public final class ConfigManager {
         return this.config;
     }
 
-    public void registerConfigFile(String filename, ConfigType configType) {
+    public Result<Void> registerConfigFile(String filename) {
+        for (ConfigType configType : ConfigType.values()) {
+            if (filename.endsWith(configType.suffix())) {
+                return registerConfigFile(filename, configType);
+            }
+        }
+        return new Result<>(false, IUtils.format("Type of File \"{}\" is not supported", filename), null);
+    }
+
+    public Result<Void> registerConfigFile(String filename, ConfigType configType) {
         if (CheckUtils.hasNull(filename, configType)) {
-            return;
+            return new Result<>(false, "invalid arguments: arguments is null", null);
+        }
+        File file = new File(filename);
+        if (!isValidFile(file)) {
+            return new Result<>(false,
+                    IUtils.format("File \"{}\" not found", file.getAbsolutePath()), null);
         }
         fileTypeMap.put(filename, configType);
         fileLastModifiedTimeMap.put(filename, Long.MIN_VALUE);
         updateConfig();
+        return new Result<>(true,
+                IUtils.format("File \"{}\" register successfully", file.getAbsolutePath()), null);
     }
 
     public void shutdown() {
@@ -62,8 +79,9 @@ public final class ConfigManager {
         config = new Config();
         fileTypeMap = new ConcurrentHashMap<>();
         fileLastModifiedTimeMap = new ConcurrentHashMap<>();
-        fileTypeMap.put(ConfigConstant.CONFIG_FILE_DEFAULT_AND_REQUIRED_CONFIG_FILE, ConfigType.YAML_CONFIG);
-        fileLastModifiedTimeMap.put(ConfigConstant.CONFIG_FILE_DEFAULT_AND_REQUIRED_CONFIG_FILE, Long.MIN_VALUE);
+        String defaultPaConfFile = System.getProperty(ConfigConstant.SYSTEM_CONFIGURE_CONF_FILE,
+                ConfigConstant.DEFAULT_CONFIGURE_CONF_FILE);
+        registerConfigFile(defaultPaConfFile);
         updateConfigInterval = config.getInteger(ConfigConstant.CONFIG_NAME_UPDATE_CONFIG_INTERVAL_SEC,
                 ConfigConstant.CONFIG_DEFAULT_UPDATE_CONFIG_INTERVAL_SEC);
     }
@@ -87,7 +105,7 @@ public final class ConfigManager {
                 configMap.putAll(loadConfigFile(filename, type));
             }
         });
-        config.setConfigMap(configMap);
+        config.updateConfigMap(configMap);
     }
 
     private Map<String, String> loadConfigFile(String filename, ConfigType configType) {
@@ -97,5 +115,8 @@ public final class ConfigManager {
         return result.isSuccess() ? result.getExtra() : new HashMap<>();
     }
 
+    private boolean isValidFile(File file) {
+        return file.exists() && file.canRead();
+    }
 
 }
