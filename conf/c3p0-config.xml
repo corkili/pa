@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+
+    <default-config>
+        <property name="driverClass">com.mysql.jdbc.Driver</property>
+        <property name="jdbcUrl">jdbc:mysql://localhost:3306/database</property>
+        <property name="user">root</property>
+        <property name="password">123456</property>
+
+        <property name="acquireIncrement">50</property>
+        <property name="initialPoolSize">10</property>
+        <property name="minPoolSize">5</property>
+        <property name="maxPoolSize">20</property>
+    </default-config>
+
+    <!--
+        需要注意的是，named-config 中 name 属性的值是和
+        DataSource dataSource = new ComboPooledDataSource("helloc3p0");
+        中构造函数的参数值向对应的。
+        若是使用默认无参构造函数时，创建 DataSource 对象时，会使用上面的 <default-config> 配置参数
+    -->
+    <named-config name="mysql">
+        <!-- 指定连接数据源的基本属性 -->
+        <property name="user">root</property>
+        <property name="password">123456</property>
+        <property name="driverClass">com.mysql.jdbc.Driver</property>
+        <property name="jdbcUrl">jdbc:mysql://localhost:3306/database</property>
+
+        <!-- 若数据库中连接数不足时, 一次向数据库服务器申请多少个连接 -->
+        <property name="acquireIncrement">5</property>
+        <!-- 初始化数据库连接池时连接的数量 -->
+        <property name="initialPoolSize">5</property>
+        <!-- 数据库连接池中的最小的数据库连接数 -->
+        <property name="minPoolSize">5</property>
+        <!-- 数据库连接池中的最大的数据库连接数 -->
+        <property name="maxPoolSize">10</property>
+
+        <!-- C3P0 数据库连接池可以维护的 Statement 的个数 -->
+        <property name="maxStatements">20</property>
+        <!-- 每个连接同时可以使用的 Statement 对象的个数 -->
+        <property name="maxStatementsPerConnection">5</property>
+
+    </named-config>
+
+</c3p0-config>
