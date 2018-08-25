@@ -27,6 +27,7 @@
         <module>pa-core</module>
         <module>pa-validation</module>
         <module>pa-dist</module>
+        <module>pa-dao</module>
     </modules>
 
     <properties>
