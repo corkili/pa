@@ -1,6 +1,7 @@
 package com.corkili.pa.dao.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -115,6 +116,31 @@ public abstract class BaseModel implements IModel {
         this.state = State.get(base.getState().getNumber());
         this.createTime = new Date(base.getCreateTime());
         this.updateTime = new Date(base.getUpdateTime());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseModel baseModel = (BaseModel) o;
+        return Objects.equals(id, baseModel.id) &&
+                state == baseModel.state &&
+                Objects.equals(createTime, baseModel.createTime) &&
+                Objects.equals(updateTime, baseModel.updateTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, state, createTime, updateTime);
+    }
+
+    @Override
+    public String toString() {
+        return "id=" + id +
+                ", state=" + state +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", ";
     }
 
     protected abstract JSONObject toJsonObject0();

@@ -1,6 +1,7 @@
 package com.corkili.pa.dao.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -91,5 +92,31 @@ public class SystemUser extends BaseModel {
         } catch (Exception e) {
             throw new SerializationException("serialize from pb failed", e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SystemUser that = (SystemUser) o;
+        return Objects.equals(email, that.email) &&
+                Objects.equals(password, that.password) &&
+                Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), email, password, username);
+    }
+
+    @Override
+    public String toString() {
+        return "SystemUser{" +
+                super.toString() +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                '}';
     }
 }
