@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package com.corkili.pa.dao.generate.protobuf;
+
+enum State
+{
+    ON_CREATE = 0;
+    ON_ACTIVE = 1;
+    ON_READ_ONLY = 2;
+    ON_DELETE = 3;
+    ON_LOCK = 4;
+}
+
+message Base
+{
+    uint64 id = 1;
+    State state = 2;
+    uint64 createTime = 3;
+    uint64 updateTime = 4;
+}
+
+message SystemUser
+{
+    Base base = 1;
+    string email = 2;
+    string password = 3;
+    string username = 4;
+}
+
+message DiaryBook
+{
+    Base base = 1;
+    string diaryBookName = 2;
+    string keywords = 3;
+    string describe = 4;
+    uint64 systemUserId = 5;
+}
+
+message Diary
+{
+    Base base = 1;
+    string diaryTitle = 2;
+    uint64 diaryTime = 3;
+    string keywords = 4;
+    string uri = 5;
+    uint64 diaryBookId = 6;
+    uint64 systemUserId = 7;
+}
