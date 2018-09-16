@@ -6,7 +6,7 @@
         <artifactId>pa</artifactId>
         <groupId>com.corkili</groupId>
         <version>1.0.0</version>
-        <relativePath>../</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,14 +14,6 @@
     <name>${project.artifactId}-${project.version}</name>
     <description>pa-server</description>
     <packaging>jar</packaging>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.corkili</groupId>
-            <artifactId>pa-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
@@ -35,5 +27,19 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.corkili</groupId>
+            <artifactId>pa-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.29.Final</version>
+        </dependency>
+    </dependencies>
 
 </project>
