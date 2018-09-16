@@ -32,19 +32,25 @@
             <destName>pa-common-${project.version}.jar</destName>
         </file>
         <file>
-            <source>${project.basedir}/../pa-server/target/pa-server-${project.version}.jar</source>
-            <outputDirectory>/lib</outputDirectory>
-            <destName>pa-server-${project.version}.jar</destName>
-        </file>
-        <file>
             <source>${project.basedir}/../pa-core/target/pa-core-${project.version}.jar</source>
             <outputDirectory>/lib</outputDirectory>
             <destName>pa-core-${project.version}.jar</destName>
+        </file>
+        <file>
+            <source>${project.basedir}/../pa-dao/target/pa-dao-${project.version}.jar</source>
+            <outputDirectory>/lib</outputDirectory>
+            <destName>pa-dao-${project.version}.jar</destName>
+        </file>
+        <file>
+            <source>${project.basedir}/../pa-server/target/pa-server-${project.version}.jar</source>
+            <outputDirectory>/lib</outputDirectory>
+            <destName>pa-server-${project.version}.jar</destName>
         </file>
         <file>
             <source>${project.basedir}/../pa-validation/target/pa-validation-${project.version}.jar</source>
             <outputDirectory>/lib</outputDirectory>
             <destName>pa-validation-${project.version}.jar</destName>
         </file>
+
     </files>
 </assembly>
